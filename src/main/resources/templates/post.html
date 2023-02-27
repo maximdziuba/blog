@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${post.getTitle()}"></title>
+</head>
+<body>
+    <div>
+        <h1 th:text="${post.getTitle()}"></h1>
+        <p th:text="'#' + ${post.getId()}"></p>
+        <p th:text="${post.getText()}"></p>
+    </div>
+</body>
+</html>

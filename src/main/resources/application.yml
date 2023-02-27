@@ -1,0 +1,12 @@
+spring:
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  datasource:
+    url: jdbc:postgresql://localhost:5432/blog
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: behama25
