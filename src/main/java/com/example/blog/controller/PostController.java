@@ -1,5 +1,6 @@
 package com.example.blog.controller;
 
+import com.example.blog.dto.RowDto;
 import com.example.blog.model.Post;
 import com.example.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class PostController {
 
     @GetMapping("/")
     public String findAllPosts(Model model) {
-        List<Post> posts = postService.findAllPosts();
-        model.addAttribute("posts", posts);
+        List<RowDto> postsInRows = postService.findAllPostsAndOrderIntoRows();
+        model.addAttribute("postsInRows", postsInRows);
         return "main";
     }
 
@@ -29,7 +30,12 @@ public class PostController {
         return "post";
     }
 
-    @PostMapping("/")
+    @GetMapping("/create")
+    public String createPostPage() {
+        return "createPost";
+    }
+
+    @PostMapping("/create")
     public String createPost(@ModelAttribute Post post) {
         postService.savePost(post);
         return "redirect:/";

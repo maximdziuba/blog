@@ -10,3 +10,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: behama25
+
+app:
+  view:
+    number-of-elements-in-row: 2
