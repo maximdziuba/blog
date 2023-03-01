@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${post.getTitle()}"></title>
-</head>
+<head th:insert="fragments/head.html :: head(${post.title()})"></head>
 <body>
-    <div>
-        <h1 th:text="${post.getTitle()}"></h1>
-        <p th:text="'#' + ${post.getId()}"></p>
-        <p th:text="${post.getText()}"></p>
-    </div>
+<nav th:insert="fragments/navbar.html :: navbar"></nav>
+<div>
+    <h1 th:text="${post.title()}"></h1>
+    <p th:text="'#' + ${post.id()}"></p>
+    <p th:text="${post.text()}"></p>
+</div>
 </body>
 </html>

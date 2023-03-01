@@ -3,7 +3,6 @@ package com.example.blog.dto;
 import com.example.blog.model.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class RowDto {
 
-    private List<Post> posts;
+    private List<PostDto> posts;
 
     public RowDto() {
         this.posts = new ArrayList<>();

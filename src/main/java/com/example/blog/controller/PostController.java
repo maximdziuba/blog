@@ -1,5 +1,6 @@
 package com.example.blog.controller;
 
+import com.example.blog.dto.PostDto;
 import com.example.blog.dto.RowDto;
 import com.example.blog.model.Post;
 import com.example.blog.service.PostService;
@@ -25,8 +26,8 @@ public class PostController {
 
     @GetMapping("/{id}")
     public String findPostById(@PathVariable(name = "id") Long id, Model model) {
-        Post post = postService.findPostById(id);
-        model.addAttribute("post", post);
+        PostDto postDto = postService.findPostById(id);
+        model.addAttribute("post", postDto);
         return "post";
     }
 
@@ -36,8 +37,8 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String createPost(@ModelAttribute Post post) {
-        postService.savePost(post);
+    public String createPost(@ModelAttribute PostDto postDto) {
+        postService.savePost(postDto);
         return "redirect:/";
     }
 

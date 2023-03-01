@@ -1,31 +1,6 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Create post</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
-</head>
+<head th:insert="fragments/head.html :: head('Create post')"></head>
 <body>
-
-
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <a class="btn btn-primary" href="/create">Створити пост</a>
-            &nbsp
-            <form class="d-flex" method="post" th:action="@{/filter}">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="title">
-                &nbsp
-                <button class="btn btn-primary" type="submit">Шукати</button>
-            </form>
-        </div>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Logout" class="btn btn-primary">
-        </form>
-    </div>
-</nav>
-
+<nav th:insert="fragments/navbar.html :: navbar"></nav>
 <div class="container">
     <form method="post" action="/create">
         <h1>Create post</h1>
