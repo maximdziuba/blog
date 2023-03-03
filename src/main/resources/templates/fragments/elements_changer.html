@@ -1,0 +1,20 @@
+<head th:insert="fragments/head.html :: head('Main')"></head>
+<html>
+<body>
+<div th:fragment="elements_changer(url, page)">
+    <ul class="pagination">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Elements on the page</a>
+        </li>
+        <div th:each="i : ${#numbers.sequence(5, 20, 5)}">
+            <li th:if="${page.getSize() ==  i}" class="page-item active">
+                <a class="page-link" th:text="${i}" th:href="${url} + '?page=' + ${page.getNumber()} + '&size=' + ${i}" tabindex="-1"></a>
+            </li>
+            <li th:unless="${page.getSize() ==  i}" class="page-item">
+                <a class="page-link" th:text="${i}" th:href="${url} + '?page=' + ${page.getNumber()} + '&size=' + ${i}" tabindex="-1"></a>
+            </li>
+        </div>
+    </ul>
+</div>
+</body>
+</html>

@@ -34,36 +34,38 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Page<RowDto> findAllPaged(Pageable pageable) {
-        List<PostDto> all = postRepository.findAll(pageable).stream().map(postDtoMapper).toList();
-        List<RowDto> rows = convertToRows(all);
-        Page<RowDto> rowsPage = new PageImpl<>(rows);
-        return rowsPage;
+    public Page<Post> findAllPaged(Pageable pageable) {
+//        List<PostDto> all = postRepository.findAll(pageable).stream().map(postDtoMapper).toList();
+        Page<Post> all = postRepository.findAll(pageable);
+//        List<RowDto> rows = convertToRows(all);
+//        Page<PostDto> rowsPage = new PageImpl<>(all);
+        return all;
     }
 
     @Override
-    public List<RowDto> findAllPostsAndOrderIntoRows() {
+    public List<PostDto> findAllPostsAndOrderIntoRows() {
         List<PostDto> all = findAll();
-        List<RowDto> rows = convertToRows(all);
-        return rows;
+//        List<RowDto> rows = convertToRows(all);
+//        return rows;
+        return all;
     }
 
-    private List<RowDto> convertToRows(List<PostDto> all) {
-        List<RowDto> rows = new ArrayList<>();
-        RowDto row = new RowDto();
-        boolean isElementLast;
-        for (int i = 0; i < all.size(); i++) {
-            List<PostDto> rowsPosts = row.getPosts();
-            rowsPosts.add(all.get(i));
-            row.setPosts(rowsPosts);
-            isElementLast = i + 1 == all.size();
-            if ((i + 1) % numberOfElementsInRow == 0 || isElementLast) {
-                rows.add(row);
-                row = new RowDto();
-            }
-        }
-        return rows;
-    }
+//    private List<RowDto> convertToRows(List<PostDto> all) {
+//        List<RowDto> rows = new ArrayList<>();
+//        RowDto row = new RowDto();
+//        boolean isElementLast;
+//        for (int i = 0; i < all.size(); i++) {
+//            List<PostDto> rowsPosts = row.getPosts();
+//            rowsPosts.add(all.get(i));
+//            row.setPosts(rowsPosts);
+//            isElementLast = i + 1 == all.size();
+//            if ((i + 1) % numberOfElementsInRow == 0 || isElementLast) {
+//                rows.add(row);
+//                row = new RowDto();
+//            }
+//        }
+//        return rows;
+//    }
 
     @Override
     public void savePost(PostDto postDto) {

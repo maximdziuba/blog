@@ -1,6 +1,6 @@
-<head th:insert="fragments/head.html :: head('Create post')"></head>
+<head th:insert="~{fragments/head.html :: head('Create post')}"></head>
 <body>
-<nav th:insert="fragments/navbar.html :: navbar"></nav>
+<nav th:insert="~{fragments/navbar.html :: navbar}"></nav>
 <div class="container">
     <form method="post" action="/create">
         <h1>Create post</h1>

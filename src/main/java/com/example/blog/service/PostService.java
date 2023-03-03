@@ -13,9 +13,9 @@ public interface PostService {
 
     List<PostDto> findAll();
 
-    Page<RowDto> findAllPaged(Pageable pageable);
+    Page<Post> findAllPaged(Pageable pageable);
 
-    List<RowDto> findAllPostsAndOrderIntoRows();
+    List<PostDto> findAllPostsAndOrderIntoRows();
 
     void savePost(PostDto postDto);
 

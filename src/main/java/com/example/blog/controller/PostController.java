@@ -1,7 +1,6 @@
 package com.example.blog.controller;
 
 import com.example.blog.dto.PostDto;
-import com.example.blog.dto.RowDto;
 import com.example.blog.model.Post;
 import com.example.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -21,21 +20,14 @@ public class PostController {
 
     private final PostService postService;
 
+    // todo: return DTO in the page
     @GetMapping("/")
-    public String findAllPosts(Model model) {
-        List<RowDto> postsInRows = postService.findAllPostsAndOrderIntoRows();
-        model.addAttribute("postsInRows", postsInRows);
-        return "main";
-    }
-
-    // todo: Pagination
-    @GetMapping("/paged")
     public String findAllPostsPaged(Model model,
                                     @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<RowDto> page = postService.findAllPaged(pageable);
+        Page<Post> page = postService.findAllPaged(pageable);
         model.addAttribute("page", page);
-        model.addAttribute("url", "/paged");
-        return "main_paged";
+        model.addAttribute("url", "/");
+        return "main";
     }
 
     @GetMapping("/{id}")
