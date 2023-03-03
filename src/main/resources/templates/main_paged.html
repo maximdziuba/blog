@@ -1,0 +1,23 @@
+<head th:insert="fragments/head.html :: head('Main')"></head>
+<body>
+<nav th:insert="fragments/navbar.html :: navbar"></nav>
+<div th:insert="fragments/pager.html :: pager(url, page)"></div>
+<div class="container">
+    <div class="row" th:each="row  : ${page.getContent()}">
+        <div class="col-sm" th:each="post : ${row.getPosts()}">
+            <div class="card">
+                <a th:href="'/' + ${post.id}"><h1 th:text="'#' + ${post.id()} + ' ' + ${post.title()}"></h1>
+                </a>
+                <p th:text="${post.text()}"></p>
+                <a th:href="'/delete/' + ${post.id()}" class="btn btn-primary">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
+</body>
+</html>

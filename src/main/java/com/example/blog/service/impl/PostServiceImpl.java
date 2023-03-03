@@ -8,10 +8,14 @@ import com.example.blog.service.PostService;
 import com.example.blog.service.mapper.PostDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +34,21 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Page<RowDto> findAllPaged(Pageable pageable) {
+        List<PostDto> all = postRepository.findAll(pageable).stream().map(postDtoMapper).toList();
+        List<RowDto> rows = convertToRows(all);
+        Page<RowDto> rowsPage = new PageImpl<>(rows);
+        return rowsPage;
+    }
+
+    @Override
     public List<RowDto> findAllPostsAndOrderIntoRows() {
         List<PostDto> all = findAll();
+        List<RowDto> rows = convertToRows(all);
+        return rows;
+    }
+
+    private List<RowDto> convertToRows(List<PostDto> all) {
         List<RowDto> rows = new ArrayList<>();
         RowDto row = new RowDto();
         boolean isElementLast;
