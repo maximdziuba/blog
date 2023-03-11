@@ -4,6 +4,7 @@ import com.example.blog.dto.PostDto;
 import com.example.blog.model.Post;
 import com.example.blog.service.PostService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -12,9 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
+@Slf4j
 @RequiredArgsConstructor
 public class PostController {
 
@@ -25,6 +25,7 @@ public class PostController {
     public String findAllPostsPaged(Model model,
                                     @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Post> page = postService.findAllPaged(pageable);
+        log.info("Total pages {}", page.getTotalPages());
         model.addAttribute("page", page);
         model.addAttribute("url", "/");
         return "main";
