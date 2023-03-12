@@ -15,6 +15,13 @@ spring:
   sql:
     init:
       mode: always
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: # enter here your client-id
+            client-secret: # enter here your client-secret
 
 app:
   view:

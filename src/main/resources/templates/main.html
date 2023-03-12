@@ -7,7 +7,9 @@
         <div class="card">
             <a th:href="'/' + ${post.getId()}"><h1 th:text="'#' + ${post.getId()} + ' ' + ${post.getTitle()}"></h1>
             </a>
-            <p th:text="${post.getText()}"></p>
+            <p th:text="${post.getId()}"></p>
+            <!--todo: link to users profile with username-->
+            <a href="#"><p th:text="${post.getAuthor().getUsername()}"></p></a>
             <a th:href="'/delete/' + ${post.getId()}" class="btn btn-primary">Delete</a>
         </div>
     </div>

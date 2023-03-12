@@ -1,10 +1,12 @@
-<head th:insert="~{fragments/head.html :: head(${post.title()})}"></head>
+<head th:insert="~{fragments/head.html :: head(${post.getTitle()})}"></head>
 <body>
 <nav th:insert="~{fragments/navbar.html :: navbar}"></nav>
 <div>
-    <h1 th:text="${post.title()}"></h1>
-    <p th:text="'#' + ${post.id()}"></p>
-    <p th:text="${post.text()}"></p>
+    <h1 th:text="${post.getTitle()}"></h1>
+    <p th:text="'#' + ${post.getId()}"></p>
+    <p th:text="${post.getText()}"></p>
+    <!--todo: link to users profile-->
+    <p>Author: <a href="#" th:text="${post.getAuthorUsername()}"></a></p>
 </div>
 </body>
 </html>

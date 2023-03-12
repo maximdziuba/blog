@@ -1,5 +1,7 @@
 package com.example.blog.config;
 
+import com.example.blog.security.oauth2.CustomOAuth2UserService;
+import com.example.blog.security.oauth2.OAuth2SuccessHandler;
 import com.example.blog.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -7,13 +9,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 
 @Configuration
@@ -21,10 +21,13 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     private final CustomUserDetailsService userDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeHttpRequests((authz) ->
                 {
                     try {
@@ -32,6 +35,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/registration", "/test").permitAll()
                                 .anyRequest().authenticated()
                                 .and()
+                                .authenticationProvider(authenticationProvider())
                                 .formLogin()
                                 .loginPage("/login")
                                 .permitAll()
@@ -39,7 +43,12 @@ public class SecurityConfiguration {
                                 .logout()
                                 .permitAll()
                                 .and()
-                                .authenticationProvider(authenticationProvider());
+                                .oauth2Login()
+                                    .loginPage("/login")
+                                    .userInfoEndpoint()
+                                    .userService(customOAuth2UserService)
+                                .and()
+                                .successHandler(oAuth2SuccessHandler);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
@@ -47,6 +56,7 @@ public class SecurityConfiguration {
 
         return http.build();
     }
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         final DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();

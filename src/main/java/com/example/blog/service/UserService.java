@@ -7,4 +7,6 @@ public interface UserService {
     User findById(Long id);
     User findByUsername(String username);
     void saveUser(User user);
+
+    void processOAuthPostLogin(String username);
 }

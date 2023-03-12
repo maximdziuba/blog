@@ -33,6 +33,9 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;

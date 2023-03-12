@@ -8,11 +8,21 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/blog
     driver-class-name: org.postgresql.Driver
-    username: postgres
+    username: maximdziuba
     password: behama25
   sql:
     init:
       mode: always
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 259086280795-2824jsornars0c412gcprj32fts2cbr7.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
 
 app:
   view:

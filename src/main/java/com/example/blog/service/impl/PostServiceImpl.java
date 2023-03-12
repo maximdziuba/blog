@@ -3,8 +3,10 @@ package com.example.blog.service.impl;
 import com.example.blog.dto.PostDto;
 import com.example.blog.dto.RowDto;
 import com.example.blog.model.Post;
+import com.example.blog.model.User;
 import com.example.blog.repository.PostRepository;
 import com.example.blog.service.PostService;
+import com.example.blog.service.UserService;
 import com.example.blog.service.mapper.PostDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +26,7 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final PostDtoMapper postDtoMapper;
+    private final UserService userService;
     @Value("${app.view.number-of-elements-in-row}")
     private Integer numberOfElementsInRow;
 
@@ -45,31 +49,16 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostDto> findAllPostsAndOrderIntoRows() {
         List<PostDto> all = findAll();
-//        List<RowDto> rows = convertToRows(all);
-//        return rows;
         return all;
     }
 
-//    private List<RowDto> convertToRows(List<PostDto> all) {
-//        List<RowDto> rows = new ArrayList<>();
-//        RowDto row = new RowDto();
-//        boolean isElementLast;
-//        for (int i = 0; i < all.size(); i++) {
-//            List<PostDto> rowsPosts = row.getPosts();
-//            rowsPosts.add(all.get(i));
-//            row.setPosts(rowsPosts);
-//            isElementLast = i + 1 == all.size();
-//            if ((i + 1) % numberOfElementsInRow == 0 || isElementLast) {
-//                rows.add(row);
-//                row = new RowDto();
-//            }
-//        }
-//        return rows;
-//    }
-
     @Override
+    @Transactional
     public void savePost(PostDto postDto) {
+        String username = postDto.getAuthorUsername();
+        User author = userService.findByUsername(username);
         Post post = postDtoMapper.convertDtoToEntity(postDto);
+        post.setAuthor(author);
         postRepository.save(post);
     }
 
