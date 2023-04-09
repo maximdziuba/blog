@@ -2,17 +2,29 @@
 <body>
 <nav th:insert="~{fragments/navbar.html :: navbar}"></nav>
 <div class="container">
-    <form method="post" action="/create">
+  <!--  <form method="post" action="/create">
         <h1>Create post</h1>
-        <div class="input-group flex-nowrap">
+        <div class="input-group flex-nowrap mb-3">
             <span class="input-group-text">Title</span>
             <input type="text" name="title" class="form-control" placeholder="Title">
         </div>
-        <div class="input-group flex-nowrap">
+        <div class="input-group flex-nowrap mb-3">
             <span class="input-group-text">Text</span>
             <input type="text" name="text" class="form-control" placeholder="Text">
         </div>
         <button class="btn btn-primary" type="submit">Submit</button>
+    </form>-->
+    <h1>Create post</h1>
+    <form action="/create" method="post">
+        <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-control" name="title" placeholder="Title">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Text</label>
+            <input type="text" class="form-control" name="text" placeholder="Text">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
 

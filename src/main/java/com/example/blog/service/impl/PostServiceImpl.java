@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -57,6 +59,7 @@ public class PostServiceImpl implements PostService {
     public void savePost(PostDto postDto) {
         String username = postDto.getAuthorUsername();
         User author = userService.findByUsername(username);
+        postDto.setCreationDate(LocalDateTime.now());
         Post post = postDtoMapper.convertDtoToEntity(postDto);
         post.setAuthor(author);
         postRepository.save(post);

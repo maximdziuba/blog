@@ -2,7 +2,6 @@ CREATE TABLE IF NOT EXISTS post(
     id    BIGINT PRIMARY KEY,
     title VARCHAR(255),
     text  TEXT,
-
 );
 
 DO $$

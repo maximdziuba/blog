@@ -2,26 +2,25 @@ package com.example.blog.controller;
 
 import com.example.blog.dto.PostDto;
 import com.example.blog.model.Post;
-import com.example.blog.model.User;
 import com.example.blog.service.PostService;
 import com.example.blog.service.mapper.PostDtoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Collections;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.time.format.DateTimeFormatter;
 
 @Controller
 @Slf4j
@@ -30,6 +29,7 @@ public class PostController {
 
     private final PostService postService;
     private final PostDtoMapper postDtoMapper;
+    private static final DateTimeFormatter DATE_FORMATTER =   DateTimeFormatter.ofPattern("HH:mm yyyy/MM/dd");
 
     // todo: return DTO in the page
     @GetMapping("/")
@@ -37,6 +37,7 @@ public class PostController {
                                     @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Post> page = postService.findAllPaged(pageable);
         log.info("Total pages {}", page.getTotalPages());
+        model.addAttribute("dateFormatter", DATE_FORMATTER);
         model.addAttribute("page", page);
         model.addAttribute("url", "/");
         return "main";
@@ -46,6 +47,7 @@ public class PostController {
     public String findPostById(@PathVariable(name = "id") Long id, Model model) {
         PostDto postDto = postService.findPostById(id);
         model.addAttribute("post", postDto);
+        model.addAttribute("dateFormatter", DATE_FORMATTER);
         return "post";
     }
 
@@ -55,8 +57,15 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String createPost(@ModelAttribute PostDto postDto, @AuthenticationPrincipal OAuth2User user) {
-        String username = (String) user.getAttributes().get("email");
+    public String createPost(@ModelAttribute PostDto postDto, Authentication authentication) {
+        String username;
+        if (authentication.getPrincipal() instanceof DefaultOidcUser) {
+            DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
+            username = oauthUser.getEmail();
+        } else {
+            UserDetails user = (UserDetails) authentication.getPrincipal();
+            username = user.getUsername();
+        }
         postDto.setAuthorUsername(username);
         postService.savePost(postDto);
         return "redirect:/";

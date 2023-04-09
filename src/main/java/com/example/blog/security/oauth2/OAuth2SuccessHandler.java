@@ -20,11 +20,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//        DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
-//        String email = oauthUser.getAttribute("email");
-//        userService.processOAuthPostLogin(email);
-
-        CustomOAuth2User oauthUser = (CustomOAuth2User) authentication.getPrincipal();
+        var oauthUser = (DefaultOidcUser) authentication.getPrincipal();
         userService.processOAuthPostLogin(oauthUser.getEmail());
         response.sendRedirect("/");
     }
