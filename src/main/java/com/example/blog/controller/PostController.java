@@ -2,6 +2,7 @@ package com.example.blog.controller;
 
 import com.example.blog.dto.PostDto;
 import com.example.blog.model.Post;
+import com.example.blog.security.utils.UserUtil;
 import com.example.blog.service.PostService;
 import com.example.blog.service.mapper.PostDtoMapper;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,11 @@ public class PostController {
     // todo: return DTO in the page
     @GetMapping("/")
     public String findAllPostsPaged(Model model,
-                                    @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+                                    @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                                    Authentication authentication) {
         Page<Post> page = postService.findAllPaged(pageable);
-        log.info("Total pages {}", page.getTotalPages());
+        String currentUserUsername = UserUtil.getUsernameFromAuthentication(authentication);
+        model.addAttribute("currentUserUsername", currentUserUsername);
         model.addAttribute("dateFormatter", DATE_FORMATTER);
         model.addAttribute("page", page);
         model.addAttribute("url", "/");
@@ -58,22 +61,19 @@ public class PostController {
 
     @PostMapping("/create")
     public String createPost(@ModelAttribute PostDto postDto, Authentication authentication) {
-        String username;
-        if (authentication.getPrincipal() instanceof DefaultOidcUser) {
-            DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
-            username = oauthUser.getEmail();
-        } else {
-            UserDetails user = (UserDetails) authentication.getPrincipal();
-            username = user.getUsername();
-        }
-        postDto.setAuthorUsername(username);
+        String currentUserUsername = UserUtil.getUsernameFromAuthentication(authentication);
+        postDto.setAuthorUsername(currentUserUsername);
         postService.savePost(postDto);
         return "redirect:/";
     }
 
     @GetMapping("/delete/{id}")
-    public String deletePost(@PathVariable(name = "id") Long id) {
-        postService.deletePostById(id);
+    public String deletePost(@PathVariable(name = "id") Long id, Authentication authentication) throws Exception {
+        String currentUserUsername = UserUtil.getUsernameFromAuthentication(authentication);
+        boolean postDeleted = postService.deletePostById(id, currentUserUsername);
+        if (!postDeleted) {
+            throw new Exception("You are not allowed to delete this post");
+        }
         return "redirect:/";
     }
 }

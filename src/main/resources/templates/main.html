@@ -12,11 +12,11 @@
 
                 <!--todo: link to users profile with username-->
                 <p class="card-text"><small class="text-muted">
-                    Created by: <a href="#" th:text="${post.getAuthor().getUsername()}"></a>
+                    Created by: <a th:href="${'/users/' + post.getAuthor().getUsername()}" th:text="${post.getAuthor().getUsername()}"></a>
                 </small></p>
                 <p class="card-text"><small class="text-muted" th:text="'Created at: ' + ${dateFormatter.format(post.getCreationDate())}"></small></p>
-                <a th:href="'/delete/' + ${post.getId()}">
-                    <button class="btn btn-primary">Delete</button>
+                <a th:href="'/delete/' + ${post.getId()}" th:if="${currentUserUsername.equals(post.getAuthor().getUsername())}">
+                    <button class="btn btn-primary">Delete this post</button>
                 </a>
             </div>
             <!--            <img class="card-img-top" alt="No image">-->
@@ -24,7 +24,7 @@
     </div>
 </div>
 <footer>
-    <div th:insert="~{fragments/pager.html :: pager(${url}, ${page})}"></div>
+    <div th:insert="~{fragments/pager-simple.html :: pager(${url}, ${page})}"></div>
 </footer>
 
 

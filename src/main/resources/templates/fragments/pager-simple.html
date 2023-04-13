@@ -1,0 +1,29 @@
+<head th:insert="fragments/head.html :: head('Main')"></head>
+<html>
+<body>
+<div th:fragment="pager(url, page)">
+
+    <ul th:with="pageNow=${0}" class="pagination">
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1">Page</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" th:href="${url} + '?page=0&size=' + ${page.getSize()}" tabindex="-1">First page</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" th:href="${url} + '?page=' + ${pageNow - 1} + '&size=' + ${page.getSize()}" tabindex="-1">Previous page</a>
+        </li>
+        <li class="page-item active">
+            <a class="page-link" th:text="${page.getNumber()}" th:href="${url} + '?page=' + ${pageNow} + '&size=' + ${page.getSize}" tabindex="-1"></a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" th:href="${url} + '?page=' + ${pageNow + 1} + '&size=' + ${page.getSize()}" tabindex="-1">Next page</a>
+        </li>
+
+        <!--        todo: add "..." button between elements, that are too far -->
+    </ul>
+
+</div>
+
+</body>
+</html>

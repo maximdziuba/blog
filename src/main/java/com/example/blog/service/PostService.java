@@ -1,9 +1,7 @@
 package com.example.blog.service;
 
 import com.example.blog.dto.PostDto;
-import com.example.blog.dto.RowDto;
 import com.example.blog.model.Post;
-import com.example.blog.service.mapper.PostDtoMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,5 +19,5 @@ public interface PostService {
 
     PostDto findPostById(Long id);
 
-    void deletePostById(Long id);
+    boolean deletePostById(Long id, String currentUserUsername);
 }

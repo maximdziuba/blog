@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{fragments/head.html :: head(${user.getUsername()})}"></head>
+<body>
+<nav th:insert="~{fragments/navbar.html :: navbar}"></nav>
+<div>
+    <h1 th:text="${user.getUsername()}"></h1>
+    <h6>Posts</h6>
+    <div th:each="post : ${user.getPosts()}">
+        <a th:href="${'/' + post.getId()}" th:text="${post.getTitle()}"></a>
+    </div>
+</div>
+</body>
+</html>
