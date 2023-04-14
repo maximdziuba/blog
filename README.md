@@ -1,6 +1,10 @@
 # Blog application #
 
 ## Instructions ##
+### In app is OAuth2 with Google is impemented###
+At first you have to create app in https://console.cloud.google.com/ and create OAuth2 Client in Credentianls and paste these credentials in application.yaml
+
+
 You can run app with Docker or with jar-file locally
 1. Clone the repository 
  ```git clone https://github.com/maximdziuba/blog.git```
