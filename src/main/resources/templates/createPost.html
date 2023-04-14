@@ -15,7 +15,7 @@
         <button class="btn btn-primary" type="submit">Submit</button>
     </form>-->
     <h1>Create post</h1>
-    <form action="/create" method="post">
+    <form action="/create" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label">Title</label>
             <input type="text" class="form-control" name="title" placeholder="Title">
@@ -23,6 +23,10 @@
         <div class="mb-3">
             <label class="form-label">Text</label>
             <input type="text" class="form-control" name="text" placeholder="Text">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Photo</label>
+            <input type="file" class="form-control" name="file" placeholder="Photo">
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

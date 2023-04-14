@@ -63,6 +63,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public boolean deletePostById(Long id, String currentUserUsername) {
         PostDto postFromDb = this.findPostById(id);
         if (postFromDb.getAuthorUsername().equals(currentUserUsername)) {

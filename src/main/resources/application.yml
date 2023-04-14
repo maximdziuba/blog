@@ -26,3 +26,5 @@ spring:
 app:
   view:
     number-of-elements-in-row: 2
+  upload:
+    path: /Users/maximdziuba/code/blog/images

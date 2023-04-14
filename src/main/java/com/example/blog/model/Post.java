@@ -20,9 +20,16 @@ public class Post {
     private Long id;
     private String title;
     private String text;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User author;
 
     private LocalDateTime creationDate;
+
+    private String filename;
+
+    @PreRemove
+    private void removeThisPostFromUserPosts() {
+        author.getPosts().remove(this);
+    }
 }

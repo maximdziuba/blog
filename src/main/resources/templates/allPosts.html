@@ -1,25 +1,30 @@
 <head th:insert="fragments/head.html :: head('Main')"></head>
 <body>
-<nav th:insert="fragments/navbar.html :: navbar"></nav>
+<nav th:insert="~{fragments/navbar.html :: navbar(${isLoggedIn})}"></nav>
 <div th:insert="~{fragments/elements_changer.html :: elements_changer(${url}, ${page})}"></div>
 <div class="container">
     <div class="col-sm mb-5" th:each="post : ${page.getContent()}">
         <div class="card mb-5">
             <div class="card-body">
-                <a th:href="'/' + ${post.getId()}"><h5 class="card-title" th:text="${post.getTitle()}">Card title</h5>
+                <a th:href="'/posts/' + ${post.getId()}"><h5 class="card-title" th:text="${post.getTitle()}">Card title</h5>
                 </a>
                 <p class="card-text" th:text="${post.getText()}"></p>
 
-                <!--todo: link to users profile with username-->
                 <p class="card-text"><small class="text-muted">
-                    Created by: <a th:href="${'/users/' + post.getAuthor().getUsername()}" th:text="${post.getAuthor().getUsername()}"></a>
+                    Created by: <a th:href="${'/users/' + post.getAuthor().getUsername()}"
+                                   th:text="${post.getAuthor().getUsername()}"></a>
                 </small></p>
-                <p class="card-text"><small class="text-muted" th:text="'Created at: ' + ${dateFormatter.format(post.getCreationDate())}"></small></p>
-                <a th:href="'/delete/' + ${post.getId()}" th:if="${currentUserUsername.equals(post.getAuthor().getUsername())}">
+                <p class="card-text"><small class="text-muted"
+                                            th:text="'Created at: ' + ${dateFormatter.format(post.getCreationDate())}"></small>
+                </p>
+                <a th:href="'/posts/delete/' + ${post.getId()}"
+                   th:if="${currentUserUsername.equals(post.getAuthor().getUsername())}">
                     <button class="btn btn-primary">Delete this post</button>
                 </a>
             </div>
-            <!--            <img class="card-img-top" alt="No image">-->
+            <div th:if="${post.getFilename()}">
+                <img class="card-img-top" alt="No image" th:src="${'/img/' + post.getFilename()}">
+            </div>
         </div>
     </div>
 </div>

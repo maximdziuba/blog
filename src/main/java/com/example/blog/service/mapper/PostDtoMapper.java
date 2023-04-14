@@ -10,7 +10,7 @@ import java.util.function.Function;
 public class PostDtoMapper implements Function<Post, PostDto> {
     @Override
     public PostDto apply(Post post) {
-        return new PostDto(post.getId(), post.getTitle(), post.getText(), post.getAuthor().getUsername(), post.getCreationDate());
+        return new PostDto(post.getId(), post.getTitle(), post.getText(), post.getAuthor().getUsername(), post.getCreationDate(), post.getFilename());
     }
 
     public Post convertDtoToEntity(PostDto postDto) {
@@ -18,6 +18,7 @@ public class PostDtoMapper implements Function<Post, PostDto> {
         post.setTitle(postDto.getTitle());
         post.setText(postDto.getText());
         post.setCreationDate(postDto.getCreationDate());
+        post.setFilename(postDto.getFilename());
         return post;
     }
 
@@ -27,7 +28,8 @@ public class PostDtoMapper implements Function<Post, PostDto> {
                 post.getTitle(),
                 post.getText(),
                 post.getAuthor().getUsername(),
-                post.getCreationDate()
+                post.getCreationDate(),
+                post.getFilename()
         );
         return postDto;
     }

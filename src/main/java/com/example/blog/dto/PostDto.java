@@ -18,4 +18,6 @@ public class PostDto {
     private String authorUsername;
 
     private LocalDateTime creationDate;
+
+    private String filename;
 }

@@ -4,8 +4,6 @@ import com.example.blog.security.oauth2.CustomOAuth2UserService;
 import com.example.blog.security.oauth2.OAuth2SuccessHandler;
 import com.example.blog.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,8 +11,11 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import java.util.List;
 
 
 @Configuration
@@ -25,6 +26,10 @@ public class SecurityConfiguration {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
+    private static final String[] PUBLIC_APIS = {
+            "/", "/posts/**", "/img/**", "/registration"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -33,11 +38,10 @@ public class SecurityConfiguration {
                 {
                     try {
                         authz
-                                .requestMatchers("/registration", "/test").permitAll()
+                                .requestMatchers(PUBLIC_APIS).permitAll()
                                 .anyRequest().authenticated()
                                 .and()
                                 .authenticationProvider(authenticationProvider())
-//                                .authenticationProvider(customAuthProvider)
                                 .formLogin()
                                 .loginPage("/login")
                                 .permitAll()
@@ -58,6 +62,11 @@ public class SecurityConfiguration {
 
         return http.build();
     }
+
+//    @Bean
+//    public WebSecurityCustomizer webSecurityCustomizer() {
+//        return (web -> web.ignoring().requestMatchers(PUBLIC_APIS));
+//    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {

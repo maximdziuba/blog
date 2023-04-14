@@ -1,9 +1,9 @@
-<head th:insert="fragments/head.html :: head()"></head>
+<head th:insert="~{fragments/head.html :: head('')}"></head>
 <body>
-<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+<nav th:fragment="navbar(isLoggedIn)" class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <ul class="navbar-nav mr-auto">
-                <li>
+                <li th:if="${isLoggedIn}">
                     <a href="/create">
                         <button class="btn btn-primary">Create new post</button>
                     </a>
@@ -17,8 +17,11 @@
                     </form>
                 </li>
         </ul>
-        <a href="/logout">
+        <a href="/logout" th:if="${isLoggedIn}">
             <button class="btn btn-primary">Logout</button>
+        </a>
+        <a href="/login" th:unless="${isLoggedIn}">
+            <button class="btn btn-primary">Login</button>
         </a>
     </div>
 </nav>
