@@ -27,4 +27,4 @@ app:
   view:
     number-of-elements-in-row: 2
   upload:
-    path: /Users/maximdziuba/code/blog/images
+    path: /Users/maximdziuba/code/blog/images # paste here your path to save images(folder will be created, if it doesn't exist)
