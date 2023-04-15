@@ -4,13 +4,12 @@
     <div class="container-fluid">
         <ul class="navbar-nav mr-auto">
                 <li th:if="${isLoggedIn}">
-                    <a href="/create">
+                    <a href="/posts/create">
                         <button class="btn btn-primary">Create new post</button>
                     </a>
                 </li>
                 <li>
-
-                    <form class="d-flex" method="post" th:action="@{/filter}">
+                    <form class="d-flex" method="post" action="/posts/filter">
                         <input class="form-control ml-3 me-2" type="search" placeholder="Search" aria-label="Search"
                                name="title">
                         <button class="btn btn-primary" type="submit">Search</button>
@@ -25,5 +24,9 @@
         </a>
     </div>
 </nav>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+        crossorigin="anonymous"></script>
 </body>
-</html>

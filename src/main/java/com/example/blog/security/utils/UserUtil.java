@@ -19,4 +19,8 @@ public class UserUtil {
         }
         return username;
     }
+
+    public static boolean isUserLoggedIn(Authentication authentication) {
+        return authentication != null;
+    }
 }

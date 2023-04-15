@@ -13,11 +13,15 @@ public interface PostService {
 
     Page<Post> findAllPaged(Pageable pageable);
 
-    List<PostDto> findAllPostsAndOrderIntoRows();
+    Page<Post> findAllByTitlePaged(String title, Pageable pageable);
+
+    Page<Post> findAllByTextPaged(String text, Pageable pageable);
 
     void savePost(PostDto postDto);
 
     PostDto findPostById(Long id);
 
     boolean deletePostById(Long id, String currentUserUsername);
+
+
 }

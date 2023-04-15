@@ -1,6 +1,7 @@
 <head th:insert="~{fragments/head.html :: head(${post.getTitle()})}"></head>
 <body>
-<nav th:insert="~{fragments/navbar.html :: navbar(${isLoggedIn})}"></nav>
+<!--<nav th:insert="~{fragments/navbar.html :: navbar(${isLoggedIn})}"></nav>-->
+<div th:insert="~{fragments/navbar.html :: navbar(${isLoggedIn})}"></div>
 <div class="card-body">
     <h1 class="card-title" th:text="${post.getTitle()}"></h1>
     <p class="card-text" th:text="${post.getText()}"></p>

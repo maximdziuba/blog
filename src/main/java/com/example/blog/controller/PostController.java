@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -42,7 +45,7 @@ public class PostController {
     public String findAllPostsPaged(@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
                                     Authentication authentication,
                                     Model model) {
-        boolean isLoggedIn = authentication != null;
+        boolean isLoggedIn = UserUtil.isUserLoggedIn(authentication);
         Page<Post> page = postService.findAllPaged(pageable);
         String currentUserUsername = UserUtil.getUsernameFromAuthentication(authentication);
 
@@ -58,7 +61,7 @@ public class PostController {
     public String findPostById(@PathVariable(name = "id") Long id,
                                Authentication authentication,
                                Model model) {
-        boolean isLoggedIn = authentication != null;
+        boolean isLoggedIn = UserUtil.isUserLoggedIn(authentication);
         PostDto postDto = postService.findPostById(id);
         String currentUserUsername = UserUtil.getUsernameFromAuthentication(authentication);
 
@@ -69,12 +72,41 @@ public class PostController {
         return "post";
     }
 
+    @PostMapping("/filter")
+    public String filterPostsByTitle(@RequestParam String title,
+                                     @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
+                                     Authentication authentication,
+                                     Model model) {
+        Page<Post> postsPage;
+        boolean isLoggedIn = UserUtil.isUserLoggedIn(authentication);
+        String currentUserUsername = UserUtil.getUsernameFromAuthentication(authentication);
+
+        if (title != null && !title.isEmpty()) {
+            postsPage = postService.findAllByTitlePaged(title, pageable);
+            if (postsPage.isEmpty()) {
+                postsPage = postService.findAllByTextPaged(title, pageable);
+            }
+        } else {
+            postsPage = postService.findAllPaged(pageable);
+        }
+        model.addAttribute("page", postsPage);
+        model.addAttribute("isLoggedIn", isLoggedIn);
+        model.addAttribute("currentUserUsername", currentUserUsername);
+        model.addAttribute("dateFormatter", DATE_FORMATTER);
+        return "allPosts";
+    }
+
+
     @GetMapping("/create")
-    public String createPostPage() {
+    @PreAuthorize("#authentication != null")
+    public String createPostPage(Authentication authentication, Model model) {
+        boolean isLoggedIn = UserUtil.isUserLoggedIn(authentication);
+        model.addAttribute("isLoggedIn", isLoggedIn);
         return "createPost";
     }
 
     @PostMapping("/create")
+    @PreAuthorize("#authentication != null")
     public String createPost(@ModelAttribute PostDto postDto,
                              @RequestParam("file") MultipartFile file,
                              Authentication authentication) throws IOException {
@@ -92,16 +124,14 @@ public class PostController {
         String currentUserUsername = UserUtil.getUsernameFromAuthentication(authentication);
         postDto.setAuthorUsername(currentUserUsername);
         postService.savePost(postDto);
-        return "redirect:/";
+        return "redirect:/posts";
     }
 
     @GetMapping("/delete/{id}")
-    public String deletePost(@PathVariable(name = "id") Long id, Authentication authentication) throws Exception {
+    @PreAuthorize("#authentication != null")
+    public String deletePost(@PathVariable(name = "id") Long id, Authentication authentication) {
         String currentUserUsername = UserUtil.getUsernameFromAuthentication(authentication);
-        boolean postDeleted = postService.deletePostById(id, currentUserUsername);
-        if (!postDeleted) {
-            throw new Exception("You are not allowed to delete this post");
-        }
+        postService.deletePostById(id, currentUserUsername);
         return "redirect:/";
     }
 }

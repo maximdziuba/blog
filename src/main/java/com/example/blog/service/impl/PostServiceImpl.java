@@ -39,10 +39,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> findAllPostsAndOrderIntoRows() {
-        List<PostDto> all = findAll();
-        return all;
+    public Page<Post> findAllByTitlePaged(String title, Pageable pageable) {
+        Page<Post> allByTitle = postRepository.findAllByTitleContainingIgnoreCase(title, pageable);
+        return allByTitle;
     }
+
+    @Override
+    public Page<Post> findAllByTextPaged(String text, Pageable pageable) {
+        Page<Post> allByText = postRepository.findAllByTextContainingIgnoreCase(text, pageable);
+        return allByText;
+    }
+
 
     @Override
     @Transactional
@@ -65,12 +72,12 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public boolean deletePostById(Long id, String currentUserUsername) {
-        PostDto postFromDb = this.findPostById(id);
-        if (postFromDb.getAuthorUsername().equals(currentUserUsername)) {
-            postRepository.deleteById(id);
-            return true;
-        }
+//        PostDto postFromDb = this.findPostById(id);
+        postRepository.deleteById(id);
+//        if (postFromDb.getAuthorUsername().equals(currentUserUsername)) {
+//            postRepository.deleteById(id);
+//            return true;
+//        }
         return false;
     }
-
 }
